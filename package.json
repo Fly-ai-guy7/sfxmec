@@ -1,0 +1,21 @@
+{
+  "name": "sfxmec-web",
+  "version": "1.0.0",
+  "description": "Structurflex Middle East (SFXMEC) - Official Website",
+  "scripts": {
+    "start": "npx serve . -p 3456",
+    "dev": "python3 -m http.server 3456",
+    "deploy:vercel": "npx -y vercel --prod",
+    "deploy:netlify": "npx -y netlify deploy --prod --dir=."
+  },
+  "keywords": [
+    "tensile-membrane",
+    "ptfe",
+    "etfe",
+    "architecture",
+    "sfxmec"
+  ],
+  "author": "Structurflex Middle East",
+  "license": "UNLICENSED",
+  "private": true
+}
