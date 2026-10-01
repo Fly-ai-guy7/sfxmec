@@ -60,8 +60,38 @@ Run any standard local server:
 # Using Python 3
 python3 -m http.server 3456
 
-# Using Node.js npx
-npx serve .
+# Using Node.js
+npm start
 ```
 
 Open `http://localhost:3456` in any modern web browser.
+
+---
+
+## 🌐 Production Deployment
+
+The project is pre-configured with production caching rules, security headers, and instant CDN deployment for **Vercel** and **Netlify**.
+
+### Option A: Deploy to Vercel (Instant CLI)
+```bash
+npx vercel
+# Follow the interactive prompt to link your account, or run in production mode:
+npm run deploy:vercel
+```
+
+### Option B: Deploy to Netlify (Instant CLI)
+```bash
+npx netlify deploy --prod
+# Or using the npm script:
+npm run deploy:netlify
+```
+
+### Option C: Connect via GitHub (Automatic CI/CD)
+1. Push this repository to GitHub:
+   ```bash
+   git remote add origin https://github.com/<your-username>/sfxmec.git
+   git push -u origin main
+   ```
+2. Log in to [Vercel](https://vercel.com) or [Netlify](https://netlify.com) and click **"Import Project"**.
+3. Select your repository. Zero configuration needed—every `git push` will automatically trigger an instant global CDN deployment!
+
