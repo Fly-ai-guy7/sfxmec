@@ -1,5 +1,5 @@
 /**
- * SFXMEC (Structurflex Middle East) - Interactive Application Logic
+ * SFXMEC (Structurflex Middle East Contracting) - Interactive Application Logic
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,7 +23,7 @@ function initNavbar() {
 
   // Sticky header class on scroll
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
+    if (window.scrollY > 30) {
       header.classList.add('scrolled');
     } else {
       header.classList.remove('scrolled');
@@ -164,80 +164,104 @@ function initPortfolioFilters() {
 }
 
 /* ==========================================================================
-   5. PROJECT CASE STUDY MODALS
+   5. PROJECT CASE STUDY MODALS (FEATURING ORIGINAL SFXMEC EXECUTED PROJECTS)
    ========================================================================== */
 const projectData = {
   1: {
-    title: 'Al Wasl Grand Sports Arena Canopy',
-    category: 'Stadiums & Sports',
+    title: 'Arched Truss — School Courtyard & Hypar Canopy',
+    category: 'Courtyards & Shades',
+    location: 'Dubai & Sharjah, UAE',
+    area: '5,800 m²',
+    material: 'Heavy-Duty Architectural PVC/PVDF (Grade IV)',
+    year: '2023',
+    client: 'Ministry of Education & Private Academies',
+    span: '38m Clear Tubular Arch Span',
+    image: 'assets/images/courtyard.jpg',
+    description: 'Specialized arched structural steel truss and hyperbolic paraboloid (Hypar) tensile membrane canopy engineered specifically for regional school courtyards. Returns 75-85% of intense solar heat externally while providing soft, natural, glare-free daylighting (9-18% transmission) for students and outdoor campus activities.'
+  },
+  2: {
+    title: 'Car Shades & Conical Umbrellas',
+    category: 'Canopies & Car Shades',
+    location: 'Dubai & Abu Dhabi, UAE',
+    area: '14,200 m²',
+    material: 'High-Tensile PVC/PVDF & Stainless Fittings',
+    year: '2024',
+    client: 'Commercial Centers & Luxury Developments',
+    span: 'Cantilever & Center-Post Conicals',
+    image: 'assets/images/hero.jpg',
+    description: 'Precision engineered cantilever parking canopies and architectural conical umbrellas designed for maximum clearance and thermal solar protection. Engineered to withstand desert gust loadings without ponding, featuring concealed rainwater downpipes and anti-wicking lacquered membrane fabrics.'
+  },
+  3: {
+    title: 'PVC Roof — Golden Gate Mirdif',
+    category: 'Commercial & Atriums',
+    location: 'Mirdif, Dubai, UAE',
+    area: '8,600 m²',
+    material: 'Precontraint High-Performance PVC Membrane',
+    year: '2022',
+    client: 'Golden Gate Commercial Center',
+    span: '48m Barrel Vault Continuous Truss',
+    image: 'assets/images/atrium.jpg',
+    description: 'Turnkey architectural roofing for Golden Gate Mirdif featuring custom barrel vault tensioned membrane modules. Designed to replace conventional heavy concrete roofing with lightweight, elegant curvature that illuminates retail thoroughfares with balanced diffused natural light.'
+  },
+  4: {
+    title: 'Flying Mast — Luxury Private Villa',
+    category: 'Canopies & Car Shades',
+    location: 'Abu Dhabi, UAE',
+    area: '3,400 m²',
+    material: 'Architectural PTFE & 316 Stainless Cables',
+    year: '2023',
+    client: 'Private Client',
+    span: 'Cable-Suspended Flying Center Mast',
+    image: 'assets/images/hero.jpg',
+    description: 'An architectural sculpture featuring a floating central steel mast tensioned solely by high-grade stainless steel boundary cables and PTFE membrane. The structure creates dramatic shaded outdoor garden living spaces without heavy foundation obstructions in the central pool terrace.'
+  },
+  5: {
+    title: 'PTFE Roof — Ladies Club & Restaurant Abu Dhabi',
+    category: 'Stadia & Leisure',
+    location: 'Corniche, Abu Dhabi, UAE',
+    area: '16,500 m²',
+    material: 'PTFE Woven Fiberglass (DIN 4102 A2 Non-Combustible)',
+    year: '2023',
+    client: 'Abu Dhabi Ladies Club / Leisure Authority',
+    span: '72m Radial Tension Net',
+    image: 'assets/images/stadium.jpg',
+    description: 'Permanent architectural tensile membrane roof spanning recreational grandstands, swimming pavilions, and waterfront restaurants. Offers complete resistance to extreme coastal saline humidity and UV radiation with an estimated 35-year design lifespan.'
+  },
+  6: {
+    title: 'Tensile Membrane Roof & Glass Facade Integration',
+    category: 'Facades & Envelopes',
+    location: 'Business Bay, Dubai, UAE',
+    area: '11,200 m²',
+    material: 'PTFE Architectural Mesh & Insulated Structural Glass',
+    year: '2024',
+    client: 'Commercial Towers Authority',
+    span: 'Custom Cable-Net Curtain Wall Truss',
+    image: 'assets/images/facade.jpg',
+    description: 'The perfect combination of tensile membrane roofing and exterior architectural glass facades. Provides dual performance: aerodynamic roof protection paired with high-efficiency solar shading mesh that cuts interior cooling energy costs by up to 45%.'
+  },
+  7: {
+    title: 'Al Wasl Grand Sports Arena & Stadium Roof',
+    category: 'Stadia & Leisure',
     location: 'Dubai, UAE',
     area: '42,500 m²',
     material: 'PTFE Architectural Fiberglass (Type IV)',
     year: '2023',
-    client: 'Dubai Sports City Authority',
+    client: 'Sports City Authority',
     span: '145m Unsupported Arch Span',
     image: 'assets/images/stadium.jpg',
-    description: 'A monumental lightweight roofing system designed to provide 100% spectator shading while maintaining natural turf daylight exposure. The structure features high-tensile PTFE coated woven fiberglass capable of withstanding extreme desert thermal expansion (+52°C) and cyclonic wind shear up to 160 km/h.'
+    description: 'Monumental 145m clear-span PTFE tensile membrane grandstand roof protecting 45,000 spectators with 100% UV filtration and dynamic non-linear FEA wind load engineering compliant with ASCE 7-16 and regional hurricane codes.'
   },
-  2: {
-    title: 'The Palm Central Pavilion & Canopy Plaza',
-    category: 'Commercial & Atriums',
-    location: 'Palm Jumeirah, Dubai',
-    area: '18,200 m²',
-    material: 'Tensile PTFE & Stainless Rigging',
-    year: '2024',
-    client: 'Nakheel Properties',
-    span: '85m Central Flying Mast',
-    image: 'assets/images/hero.jpg',
-    description: 'An iconic sculptural landmark integrating sweeping hyperbolic paraboloid tensile membranes with bespoke structural steel tripod masts. Features integrated LED edge-lit illumination creating an awe-inspiring twilight visual identity with 82% solar heat rejection.'
-  },
-  3: {
-    title: 'Oasis Garden Luxury Atrium Skylight',
-    category: 'Commercial & Atriums',
-    location: 'New Cairo, Egypt',
-    area: '12,600 m²',
-    material: '3-Layer ETFE Pneumatic Cushion System',
-    year: '2023',
-    client: 'Emaar Misr',
-    span: '65m Steel Diagrid Frame',
-    image: 'assets/images/atrium.jpg',
-    description: 'Ultra-transparent pneumatic ETFE foil cushions engineered with custom silver frit matrix printing to regulate solar heat gain coefficient (SHGC) at 0.28 while bathing the indoor botanical forest in 90% natural full-spectrum sunlight.'
-  },
-  4: {
-    title: 'Doha Corporate Headquarters Parametric Facade',
-    category: 'Facades & Sunscreens',
-    location: 'West Bay, Doha',
-    area: '8,400 m²',
-    material: 'PTFE Architectural Mesh & Cable-Net',
-    year: '2022',
-    client: 'Qatari Diar',
-    span: 'Multi-Story Tension Truss',
-    image: 'assets/images/facade.jpg',
-    description: 'A striking parametric tensile second-skin facade that wraps the building envelope. Provides 45% reduction in HVAC energy loads by blocking intense Middle Eastern solar glare without obstructing panoramic sea views.'
-  },
-  5: {
-    title: 'Terminal 1 Arrivals Canopy Concourse',
-    category: 'Airport & Transport',
-    location: 'Abu Dhabi, UAE',
+  8: {
+    title: 'Terminal 1 Arrivals Concourse & Transit Shading',
+    category: 'Transport & Public Shades',
+    location: 'Abu Dhabi International Airport, UAE',
     area: '24,000 m²',
     material: 'PTFE Coated Fiberglass High-Tensile',
     year: '2023',
-    client: 'Abu Dhabi Airports Company',
+    client: 'Airports Authority',
     span: '110m Undulating Wave Concourse',
     image: 'assets/images/transport.jpg',
-    description: 'High-traffic drop-off concourse canopy designed for seamless airport arrival transit. Provides continuous shade across 6 traffic lanes with self-cleaning titanium dioxide top-coat maintaining pristine white finish despite dust storms.'
-  },
-  6: {
-    title: 'Metropolitan Campus Shaded Courtyards',
-    category: 'Urban & Courtyards',
-    location: 'Riyadh, Saudi Arabia',
-    area: '9,500 m²',
-    material: 'Heavy-Duty PVC/PVDF Membrane',
-    year: '2024',
-    client: 'Ministry of Education, KSA',
-    span: 'Modular Inverted Conical Sails',
-    image: 'assets/images/courtyard.jpg',
-    description: 'Interlocking inverted conical membrane umbrellas with internal rainwater drainage piping. Creates a cool microclimate for over 4,000 university students with high acoustic absorption reducing courtyard echoes.'
+    description: 'Undulating aerodynamic canopy spanning 6 lanes of passenger drop-off transit. Features self-cleaning photocatalytic TiO2 surface chemistry that dissolves dust particles under Middle Eastern sunlight, staying pristine white across decades.'
   }
 };
 
@@ -312,34 +336,34 @@ function initScopeEstimator() {
     const area = parseInt(areaSlider.value, 10);
     areaDisplay.textContent = `${area.toLocaleString()} m²`;
 
-    let selectedApp = document.querySelector('input[name="estApp"]:checked')?.value || 'stadium';
+    let selectedApp = document.querySelector('input[name="estApp"]:checked')?.value || 'courtyard';
     let selectedMat = document.querySelector('input[name="estMat"]:checked')?.value || 'ptfe';
     let selectedRegion = regionSelect?.value || 'UAE';
 
-    // Calculation multipliers
+    // Multipliers for engineering metrics
     let weightPerM2 = 1.35; // kg/m²
-    let lightTrans = '12%';
+    let lightTrans = '12% - 16%';
     let lifespan = '30+ Years';
     let solarRejection = '78%';
     let steelDensity = 24; // kg steel per m² membrane
 
     if (selectedMat === 'ptfe') {
       weightPerM2 = 1.45;
-      lightTrans = '14%';
-      lifespan = '30 - 35 Years';
-      solarRejection = '82%';
+      lightTrans = '12% - 18% (Glare-free)';
+      lifespan = '30 - 35+ Years';
+      solarRejection = '80% - 85%';
       steelDensity = 26;
     } else if (selectedMat === 'etfe') {
       weightPerM2 = 0.45;
-      lightTrans = '88 - 92%';
+      lightTrans = '88% - 94% (Full Daylight)';
       lifespan = '25 - 30 Years';
       solarRejection = '68% (Frit Printed)';
       steelDensity = 18;
     } else if (selectedMat === 'pvc') {
       weightPerM2 = 1.15;
-      lightTrans = '8%';
-      lifespan = '15 - 20 Years';
-      solarRejection = '74%';
+      lightTrans = '8% - 12% (Diffused)';
+      lifespan = '15 - 20+ Years';
+      solarRejection = '75%';
       steelDensity = 21;
     }
 
@@ -347,7 +371,7 @@ function initScopeEstimator() {
     const estimatedSteelTonnage = Math.round((area * steelDensity) / 1000);
     
     // Approximate turnaround weeks
-    let weeks = Math.max(8, Math.round(Math.sqrt(area) * 0.45));
+    let weeks = Math.max(6, Math.round(Math.sqrt(area) * 0.4));
 
     document.getElementById('calcArea').textContent = `${area.toLocaleString()} m²`;
     document.getElementById('calcMatName').textContent = selectedMat.toUpperCase();
@@ -389,7 +413,7 @@ function initScopeEstimator() {
       if (subjectSelect) subjectSelect.value = 'RFP Proposal Request';
 
       if (messageBox) {
-        messageBox.value = `Hello SFXMEC Engineering Team,\n\nI would like to request an official Engineering Scope & Proposal based on the website calculator configuration:\n- Application: ${app}\n- Estimated Area: ${parseInt(area, 10).toLocaleString()} m²\n- Membrane Material: ${mat}\n- Target Region: ${reg}\n\nPlease reach out with technical pre-qualification and consultation details.`;
+        messageBox.value = `Hello Structurflex Middle East Engineering Team,\n\nI would like to request an official Engineering Scope & Proposal based on the website calculator configuration:\n- Application: ${app}\n- Estimated Area: ${parseInt(area, 10).toLocaleString()} m²\n- Membrane Material: ${mat}\n- Target Region: ${reg}\n\nPlease reach out with technical pre-qualification and consultation details.`;
       }
 
       // Smooth scroll to contact section
@@ -435,6 +459,6 @@ function initContactForm() {
           alertBox.style.display = 'none';
         }, 7000);
       }
-    }, 1200);
+    }, 1000);
   });
 }
