@@ -309,7 +309,11 @@ button, input, select, textarea {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.nav-container {
+.site-header .nav-container {
+  max-width: 1560px;
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -320,12 +324,12 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   text-decoration: none;
-  margin-right: 2.5rem;
+  margin-right: 2.25rem;
   flex-shrink: 0;
 }
 
 .brand-logo-img {
-  height: 48px;
+  height: 44px;
   width: auto;
   object-fit: contain;
 }
@@ -333,16 +337,18 @@ button, input, select, textarea {
 .nav-menu {
   display: flex;
   align-items: center;
-  gap: 1.45rem;
+  gap: 1.85rem;
   list-style: none;
 }
 
 .nav-link {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--brand-charcoal);
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.2rem;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
   transition: color var(--transition-fast);
 }
 
@@ -357,7 +363,7 @@ button, input, select, textarea {
   bottom: 0;
   left: 0;
   width: 0%;
-  height: 3px;
+  height: 2.5px;
   background: var(--brand-blue);
   transition: width var(--transition-normal);
   border-radius: var(--radius-full);
@@ -372,6 +378,8 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   gap: 1.25rem;
+  flex-shrink: 0;
+  margin-left: 1.5rem;
 }
 
 .region-badge {
@@ -1919,7 +1927,17 @@ button, input, select, textarea {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
+  .region-badge {
+    display: none;
+  }
+
+  .nav-menu {
+    gap: 1.35rem;
+  }
+}
+
+@media (max-width: 1024px) {
   :root {
     --nav-height: 72px;
   }
@@ -1950,6 +1968,7 @@ button, input, select, textarea {
   .region-badge {
     display: none;
   }
+}
 
   .hero-stats {
     grid-template-columns: repeat(2, 1fr);
