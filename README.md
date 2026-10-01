@@ -87,10 +87,10 @@ npm run deploy:netlify
 ```
 
 ### Option C: Connect via GitHub (Automatic CI/CD)
-1. Push this repository to GitHub:
+1. Repository is live on GitHub:
+   - **Repository**: [https://github.com/Fly-ai-guy7/sfxmec](https://github.com/Fly-ai-guy7/sfxmec)
    ```bash
-   git remote add origin https://github.com/<your-username>/sfxmec.git
-   git push -u origin main
+   git push origin main
    ```
 2. Log in to [Vercel](https://vercel.com) or [Netlify](https://netlify.com) and click **"Import Project"**.
 3. Select your repository. Zero configuration needed—every `git push` will automatically trigger an instant global CDN deployment!
