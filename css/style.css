@@ -2642,6 +2642,373 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
+   SUBPAGE ARCHITECTURAL BANNER & BREADCRUMBS
+   ========================================================================== */
+.page-header-banner {
+  background: #09101f;
+  color: #ffffff;
+  padding: calc(var(--nav-height) + 3.5rem) 0 4rem;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-header-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 30%, rgba(0, 90, 156, 0.25), transparent 60%);
+  pointer-events: none;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  color: #94a3b8;
+  margin-bottom: 1.25rem;
+}
+
+.breadcrumbs a {
+  color: #94a3b8;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbs a:hover {
+  color: #38bdf8;
+}
+
+.breadcrumbs span.divider {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.breadcrumbs span.current {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.page-header-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.25rem;
+  max-width: 900px;
+}
+
+.page-header-subtitle {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: #cbd5e1;
+  line-height: 1.75;
+  max-width: 780px;
+}
+
+/* ==========================================================================
+   BLOG & JOURNAL STYLES
+   ========================================================================== */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.25rem;
+}
+
+.blog-card {
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-blue);
+}
+
+.blog-visual-wrap {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.blog-visual-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.blog-card:hover .blog-visual-wrap img {
+  transform: scale(1.06);
+}
+
+.blog-tag-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(9, 16, 31, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.blog-card-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.blog-meta-strip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-bottom: 0.85rem;
+}
+
+.blog-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.35;
+  margin-bottom: 0.85rem;
+  letter-spacing: -0.015em;
+}
+
+.blog-card:hover .blog-title {
+  color: var(--brand-blue);
+}
+
+.blog-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 1.75rem;
+  flex-grow: 1;
+}
+
+.blog-author-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.blog-author-name {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.blog-read-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--brand-blue);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   SERVICES DEEP-DIVE EXPANDED CARDS
+   ========================================================================== */
+.service-deep-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+}
+
+.service-deep-card {
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 2.75rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.service-deep-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--brand-blue);
+  box-shadow: var(--shadow-lg);
+}
+
+.service-deep-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-deep-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-sm);
+  background: var(--brand-blue-light);
+  border: 1px solid rgba(0, 90, 156, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand-blue);
+  flex-shrink: 0;
+}
+
+.service-deep-title {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.015em;
+}
+
+.service-deep-desc {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 1.75rem;
+  flex-grow: 1;
+}
+
+.service-deep-bullets {
+  list-style: none;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.service-deep-bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.service-deep-bullets li svg {
+  color: var(--brand-green);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   LEGAL DOCUMENT & PRIVACY STYLES
+   ========================================================================== */
+.legal-document-card {
+  background: #ffffff;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 3.5rem;
+  box-shadow: var(--shadow-sm);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.legal-notice-box {
+  background: var(--bg-secondary);
+  border-left: 4px solid var(--brand-blue);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.legal-section {
+  margin-bottom: 2.75rem;
+}
+
+.legal-section:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section h2, .legal-section h3 {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.legal-section p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.legal-section ul {
+  list-style: disc;
+  margin-left: 1.75rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+}
+
+.legal-section li {
+  margin-bottom: 0.5rem;
+}
+
+/* Callout Strip for Subpages */
+.page-cta-strip {
+  background: linear-gradient(135deg, #09101f, #131e36);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  padding: 3.5rem 3rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  margin-top: 4.5rem;
+  box-shadow: var(--shadow-dark);
+}
+
+.page-cta-text h3 {
+  font-family: var(--font-heading);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.page-cta-text p {
+  color: #cbd5e1;
+  font-size: 1.02rem;
+  max-width: 600px;
+  line-height: 1.65;
+}
+
+/* ==========================================================================
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 @media (max-width: 1200px) {
@@ -2856,5 +3223,24 @@ button, input, select, textarea {
 
   .modal-specs-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-deep-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-cta-strip {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.75rem;
+    padding: 2.5rem 1.75rem;
+  }
+
+  .legal-document-card {
+    padding: 2rem 1.5rem;
   }
 }

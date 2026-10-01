@@ -51,26 +51,48 @@ function initNavbar() {
     });
   }
 
-  // Active link highlighter on scroll
-  const sections = document.querySelectorAll('section[id]');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    const scrollPos = window.scrollY + 120;
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
-    });
+  // Multi-page active link highlighting
+  const currentPath = window.location.pathname;
+  let pageFilename = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+  if (!pageFilename || pageFilename === '/') pageFilename = 'index.html';
 
-    navLinks.forEach(link => {
+  let hasMatchedPage = false;
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    if (href === pageFilename || (pageFilename === 'index.html' && (href === '/' || href === 'index.html'))) {
+      link.classList.add('active');
+      hasMatchedPage = true;
+    } else {
       link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
-    });
+    }
   });
+
+  // In-page scroll spy only if on index.html with section anchors
+  if (pageFilename === 'index.html') {
+    const sections = document.querySelectorAll('section[id]');
+    if (sections.length > 0) {
+      window.addEventListener('scroll', () => {
+        let current = '';
+        const scrollPos = window.scrollY + 120;
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        if (current) {
+          navLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${current}`) {
+              navLinks.forEach(l => l.classList.remove('active'));
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }
+  }
 }
 
 /* ==========================================================================
@@ -321,6 +343,20 @@ function initPortfolioFilters() {
       });
     });
   });
+
+  // Deep linking via URL parameter (e.g. projects.html?cat=education)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cat = urlParams.get('cat');
+    if (cat) {
+      const targetBtn = Array.from(filterBtns).find(btn => btn.getAttribute('data-filter') === cat);
+      if (targetBtn) {
+        targetBtn.click();
+      }
+    }
+  } catch (e) {
+    // Ignore URL parse error
+  }
 }
 
 /* ==========================================================================
