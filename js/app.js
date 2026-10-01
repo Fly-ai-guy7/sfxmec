@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMaterialTabs();
   initPortfolioFilters();
   initProjectModals();
-  initScopeEstimator();
+  initConversationalEstimator();
   initContactForm();
 });
 
@@ -74,25 +74,26 @@ function initNavbar() {
 }
 
 /* ==========================================================================
-   2. ANIMATED NUMBER COUNTERS
+   2. ANIMATED NUMBER COUNTERS (SUPPORTS MONUMENTAL TYPOGRAPHY & STATS)
    ========================================================================== */
 function initStatCounters() {
-  const statNumbers = document.querySelectorAll('.stat-number');
+  const statNumbers = document.querySelectorAll('.stat-number, .counter');
   let animated = false;
 
   const countUp = () => {
     statNumbers.forEach(stat => {
       const target = parseInt(stat.getAttribute('data-target'), 10);
+      if (isNaN(target)) return;
       const suffix = stat.getAttribute('data-suffix') || '';
       let count = 0;
       const step = Math.ceil(target / 40);
       const timer = setInterval(() => {
         count += step;
         if (count >= target) {
-          stat.innerHTML = `${target.toLocaleString()}<span class="stat-suffix">${suffix}</span>`;
+          stat.textContent = target.toLocaleString();
           clearInterval(timer);
         } else {
-          stat.innerHTML = `${count.toLocaleString()}<span class="stat-suffix">${suffix}</span>`;
+          stat.textContent = count.toLocaleString();
         }
       }, 35);
     });
@@ -105,33 +106,192 @@ function initStatCounters() {
         animated = true;
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.2 });
 
-  const statsRibbon = document.querySelector('.hero-stats');
-  if (statsRibbon) {
-    observer.observe(statsRibbon);
+  const statsTarget = document.querySelector('.hero-monument-stats') || document.querySelector('.hero-stats');
+  if (statsTarget) {
+    observer.observe(statsTarget);
   }
 }
 
 /* ==========================================================================
-   3. INTERACTIVE MATERIAL MATRIX TABS
+   3. INTERACTIVE MATERIAL COMPARATOR MATRIX (LIVE ARCHITECTURAL CONSOLE)
    ========================================================================== */
+const materialMatrixData = {
+  ptfe: {
+    lifespan: '35+',
+    lifespanUnit: 'Years',
+    lifespanBar: '100%',
+    lifespanSub: 'Permanent Non-Combustible',
+    heat: '85%',
+    heatUnit: 'Deflection',
+    heatBar: '85%',
+    heatSub: 'Blocks 85% Infrared Load',
+    strength: '8,000',
+    strengthUnit: 'N/5cm',
+    strengthBar: '95%',
+    strengthSub: 'Woven Glass Fiber Base',
+    light: '15%',
+    lightUnit: 'Glare-Free',
+    lightBar: '25%',
+    lightSub: 'Soft Diffused Lux Level',
+    badge: 'NON-COMBUSTIBLE • DIN 4102 A2 • ASTM E108',
+    title: 'PTFE Architectural Fiberglass',
+    desc: 'The premier choice for permanent monumental tensile architecture. Woven glass fiber coated with chemically inert Teflon™ PTFE. Completely impervious to Middle Eastern UV radiation, self-cleaning under rain, with an expected lifespan exceeding 35 years.',
+    chemical: 'Woven Silica Glass Core Encapsulated in Dupont Teflon Fluoropolymer',
+    cleaning: 'Photocatalytic TiO2 top-coat oxidizes organic airborne dust and soot',
+    benchmark: 'Abu Dhabi Ladies Club PTFE Roof, Al Wasl Grand Arena, Terminal 1 Airport Concourse',
+    tableRows: [
+      { criterion: 'Fire Resistance Classification', rating: '<strong class="highlight-val">Class A / Non-Burning (ASTM E108)</strong>' },
+      { criterion: 'Weight per m²', rating: '1.45 kg/m² (~1% weight of insulated glass)' },
+      { criterion: 'Thermal Insulation U-Value', rating: '4.5 W/m²K (Single Layer) | 1.8 W/m²K (Insulated Aerogel)' },
+      { criterion: 'Middle Eastern UV Resistance', rating: '100% Inert — Zero Photodegradation over 35+ Years' },
+      { criterion: 'Standard Joint Methodology', rating: 'High-Temperature Thermal Compression Fusion Seams' }
+    ]
+  },
+  etfe: {
+    lifespan: '25 - 30',
+    lifespanUnit: 'Years',
+    lifespanBar: '80%',
+    lifespanSub: 'Self-Extinguishing Fluoropolymer',
+    heat: '75%',
+    heatUnit: 'Deflection',
+    heatBar: '75%',
+    heatSub: 'Custom Ceramic Frit Shading',
+    strength: '3,500',
+    strengthUnit: 'N/5cm',
+    strengthBar: '60%',
+    strengthSub: 'Biaxially Oriented Extruded Foil',
+    light: '92%',
+    lightUnit: 'Transparent',
+    lightBar: '95%',
+    lightSub: 'Glass Clarity at 1% Weight',
+    badge: 'GLASS REPLACEMENT • EN 13501-1 B-s1,d0 • 92% LUX',
+    title: 'ETFE Pneumatic Foil Cushions',
+    desc: 'Transparent architectural foil cushions stabilized with low-pressure pneumatic air supply units. Provides maximum natural daylighting for commercial retail atriums and botanical enclosures with negligible structural dead load.',
+    chemical: '100% Recyclable Ethylene Tetrafluoroethylene Fluoropolymer Copolymer',
+    cleaning: 'Low-friction surface naturally sheds desert sand and dust via rainwater',
+    benchmark: 'Mall Atrium Skylights, Luxury Botanical Gardens, Concourse Enclosures',
+    tableRows: [
+      { criterion: 'Fire Resistance Classification', rating: '<strong class="highlight-val">Class B1 / Self-Extinguishing (DIN 4102)</strong>' },
+      { criterion: 'Weight per m²', rating: '0.35 - 0.70 kg/m² (~1% weight of insulated glass)' },
+      { criterion: 'Thermal Insulation U-Value', rating: '1.6 - 2.0 W/m²K (3-Layer Pneumatic Cushion)' },
+      { criterion: 'Middle Eastern UV Resistance', rating: '95%+ Transparency; Zero UV-induced embrittlement' },
+      { criterion: 'Standard Joint Methodology', rating: 'Continuous CNC Perimeter Aluminum Extrusion Clamping' }
+    ]
+  },
+  pvc: {
+    lifespan: '15 - 20+',
+    lifespanUnit: 'Years',
+    lifespanBar: '55%',
+    lifespanSub: 'Flame-Retardant PVDF Topcoat',
+    heat: '78%',
+    heatUnit: 'Deflection',
+    heatBar: '78%',
+    heatSub: 'High Solar Reflectance Index',
+    strength: '6,000',
+    strengthUnit: 'N/5cm',
+    strengthBar: '75%',
+    strengthSub: 'High-Tenacity Polyester Core',
+    light: '10%',
+    lightUnit: 'Diffused',
+    lightBar: '18%',
+    lightSub: 'Uniform Soft Ambient Shade',
+    badge: 'HIGH VERSATILITY • NFPA 701 • DIN 4102 B1',
+    title: 'PVC / PVDF Tensile Composite',
+    desc: 'High-strength woven polyester base fabric coated with plasticized PVC and sealed with a fluoropolymer PVDF protective lacquer. Highly ductile, cost-efficient, and optimized for rapid turnkey fabrication and erection across the GCC.',
+    chemical: 'High-Tenacity Woven Polyester Core with Multi-Layer PVDF Protective Lacquer',
+    cleaning: 'Fluoro-polymer lacquer resists dust adhering; periodic pressure wash recommended',
+    benchmark: 'Golden Gate Mirdif Center, School Courtyard Canopies, Commercial Car Shades',
+    tableRows: [
+      { criterion: 'Fire Resistance Classification', rating: '<strong class="highlight-val">Flame Retardant (DIN 4102 B1 / NFPA 701)</strong>' },
+      { criterion: 'Weight per m²', rating: '0.95 - 1.35 kg/m² (Type II to Type IV grades)' },
+      { criterion: 'Thermal Insulation U-Value', rating: '5.2 W/m²K (Single Layer Membrane)' },
+      { criterion: 'Middle Eastern UV Resistance', rating: 'PVDF Sealed against photo-oxidation; antifungal treated' },
+      { criterion: 'Standard Joint Methodology', rating: 'High-Frequency (HF) Electronic Molecular Seaming' }
+    ]
+  }
+};
+
 function initMaterialTabs() {
-  const tabBtns = document.querySelectorAll('.mat-tab-btn');
-  const panels = document.querySelectorAll('.material-panel');
+  const switchBtns = document.querySelectorAll('.mat-switch-btn');
+  if (!switchBtns.length) return;
 
-  tabBtns.forEach(btn => {
+  const updateMaterialConsole = (matKey) => {
+    const data = materialMatrixData[matKey];
+    if (!data) return;
+
+    // Update active tab buttons
+    switchBtns.forEach(btn => {
+      const isTarget = btn.getAttribute('data-material') === matKey;
+      btn.classList.toggle('active', isTarget);
+      btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+    });
+
+    // Update KPIs
+    const dynLifespan = document.getElementById('dynLifespan');
+    const dynHeat = document.getElementById('dynHeat');
+    const dynStrength = document.getElementById('dynStrength');
+    const dynLight = document.getElementById('dynLight');
+
+    if (dynLifespan) dynLifespan.innerHTML = `${data.lifespan} <span class="kpi-unit">${data.lifespanUnit}</span>`;
+    if (dynHeat) dynHeat.innerHTML = `${data.heat} <span class="kpi-unit">${data.heatUnit}</span>`;
+    if (dynStrength) dynStrength.innerHTML = `${data.strength} <span class="kpi-unit">${data.strengthUnit}</span>`;
+    if (dynLight) dynLight.innerHTML = `${data.light} <span class="kpi-unit">${data.lightUnit}</span>`;
+
+    // Update meter bars
+    const dynLifespanBar = document.getElementById('dynLifespanBar');
+    const dynHeatBar = document.getElementById('dynHeatBar');
+    const dynStrengthBar = document.getElementById('dynStrengthBar');
+    const dynLightBar = document.getElementById('dynLightBar');
+
+    if (dynLifespanBar) dynLifespanBar.style.width = data.lifespanBar;
+    if (dynHeatBar) dynHeatBar.style.width = data.heatBar;
+    if (dynStrengthBar) dynStrengthBar.style.width = data.strengthBar;
+    if (dynLightBar) dynLightBar.style.width = data.lightBar;
+
+    // Update sub labels
+    const dynLifespanSub = document.getElementById('dynLifespanSub');
+    const dynHeatSub = document.getElementById('dynHeatSub');
+    const dynStrengthSub = document.getElementById('dynStrengthSub');
+    const dynLightSub = document.getElementById('dynLightSub');
+
+    if (dynLifespanSub) dynLifespanSub.textContent = data.lifespanSub;
+    if (dynHeatSub) dynHeatSub.textContent = data.heatSub;
+    if (dynStrengthSub) dynStrengthSub.textContent = data.strengthSub;
+    if (dynLightSub) dynLightSub.textContent = data.lightSub;
+
+    // Update Spec Narrative
+    const dynBadge = document.getElementById('dynBadge');
+    const dynTitle = document.getElementById('dynTitle');
+    const dynDesc = document.getElementById('dynDesc');
+    const dynChemical = document.getElementById('dynChemical');
+    const dynCleaning = document.getElementById('dynCleaning');
+    const dynBenchmark = document.getElementById('dynBenchmark');
+
+    if (dynBadge) dynBadge.textContent = data.badge;
+    if (dynTitle) dynTitle.textContent = data.title;
+    if (dynDesc) dynDesc.textContent = data.desc;
+    if (dynChemical) dynChemical.textContent = data.chemical;
+    if (dynCleaning) dynCleaning.textContent = data.cleaning;
+    if (dynBenchmark) dynBenchmark.textContent = data.benchmark;
+
+    // Update Spec Table
+    const dynTableBody = document.getElementById('dynTableBody');
+    if (dynTableBody && data.tableRows) {
+      dynTableBody.innerHTML = data.tableRows.map(row => `
+        <tr>
+          <td>${row.criterion}</td>
+          <td>${row.rating}</td>
+        </tr>
+      `).join('');
+    }
+  };
+
+  switchBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const targetMat = btn.getAttribute('data-material');
-
-      tabBtns.forEach(b => b.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-
-      btn.classList.add('active');
-      const targetPanel = document.getElementById(`panel-${targetMat}`);
-      if (targetPanel) {
-        targetPanel.classList.add('active');
-      }
+      const mat = btn.getAttribute('data-material');
+      updateMaterialConsole(mat);
     });
   });
 }
@@ -320,103 +480,289 @@ function initProjectModals() {
 }
 
 /* ==========================================================================
-   6. INTERACTIVE SCOPE & RFP ESTIMATOR
+   6. CONVERSATIONAL STEPPED SCOPE ESTIMATOR
    ========================================================================== */
-function initScopeEstimator() {
-  const areaSlider = document.getElementById('estAreaSlider');
-  const areaDisplay = document.getElementById('estAreaDisplay');
-  const appOptions = document.querySelectorAll('input[name="estApp"]');
-  const matOptions = document.querySelectorAll('input[name="estMat"]');
-  const regionSelect = document.getElementById('estRegion');
-  const btnApplyRFP = document.getElementById('btnApplyRFP');
+function initConversationalEstimator() {
+  const estimatorCard = document.querySelector('.estimator-stepped-card');
+  if (!estimatorCard) return;
 
-  if (!areaSlider) return;
-
-  const updateCalculations = () => {
-    const area = parseInt(areaSlider.value, 10);
-    areaDisplay.textContent = `${area.toLocaleString()} m²`;
-
-    let selectedApp = document.querySelector('input[name="estApp"]:checked')?.value || 'courtyard';
-    let selectedMat = document.querySelector('input[name="estMat"]:checked')?.value || 'ptfe';
-    let selectedRegion = regionSelect?.value || 'UAE';
-
-    // Multipliers for engineering metrics
-    let weightPerM2 = 1.35; // kg/m²
-    let lightTrans = '12% - 16%';
-    let lifespan = '30+ Years';
-    let solarRejection = '78%';
-    let steelDensity = 24; // kg steel per m² membrane
-
-    if (selectedMat === 'ptfe') {
-      weightPerM2 = 1.45;
-      lightTrans = '12% - 18% (Glare-free)';
-      lifespan = '30 - 35+ Years';
-      solarRejection = '80% - 85%';
-      steelDensity = 26;
-    } else if (selectedMat === 'etfe') {
-      weightPerM2 = 0.45;
-      lightTrans = '88% - 94% (Full Daylight)';
-      lifespan = '25 - 30 Years';
-      solarRejection = '68% (Frit Printed)';
-      steelDensity = 18;
-    } else if (selectedMat === 'pvc') {
-      weightPerM2 = 1.15;
-      lightTrans = '8% - 12% (Diffused)';
-      lifespan = '15 - 20+ Years';
-      solarRejection = '75%';
-      steelDensity = 21;
-    }
-
-    const totalMembraneWeight = ((area * weightPerM2) / 1000).toFixed(1);
-    const estimatedSteelTonnage = Math.round((area * steelDensity) / 1000);
-    
-    // Approximate turnaround weeks
-    let weeks = Math.max(6, Math.round(Math.sqrt(area) * 0.4));
-
-    document.getElementById('calcArea').textContent = `${area.toLocaleString()} m²`;
-    document.getElementById('calcMatName').textContent = selectedMat.toUpperCase();
-    document.getElementById('calcWeight').textContent = `${totalMembraneWeight} Metric Tons`;
-    document.getElementById('calcSteel').textContent = `~${estimatedSteelTonnage} Metric Tons`;
-    document.getElementById('calcLight').textContent = lightTrans;
-    document.getElementById('calcSolar').textContent = solarRejection;
-    document.getElementById('calcLifespan').textContent = lifespan;
-    document.getElementById('calcTimeline').textContent = `${weeks} - ${weeks + 4} Weeks`;
-
-    // Highlight active radio visual wrappers
-    document.querySelectorAll('.est-option').forEach(opt => {
-      const radio = opt.querySelector('input[type="radio"]');
-      if (radio && radio.checked) {
-        opt.classList.add('active');
-      } else {
-        opt.classList.remove('active');
-      }
-    });
+  const state = {
+    currentStep: 1,
+    typology: 'hospitality',
+    typologyName: 'Hospitality & Outdoor Dining',
+    area: 2500,
+    environment: 'coastal',
+    region: 'UAE',
+    material: 'ptfe',
+    materialPriority: 'permanent'
   };
 
-  areaSlider.addEventListener('input', updateCalculations);
-  appOptions.forEach(opt => opt.addEventListener('change', updateCalculations));
-  matOptions.forEach(opt => opt.addEventListener('change', updateCalculations));
-  if (regionSelect) regionSelect.addEventListener('change', updateCalculations);
+  const panes = document.querySelectorAll('.est-pane');
+  const stepPills = document.querySelectorAll('.step-pill');
+  const progressBar = document.getElementById('estProgressBar');
+  const nextBtns = document.querySelectorAll('.est-btn-next');
+  const backBtns = document.querySelectorAll('.est-btn-back');
+  const restartBtn = document.getElementById('btnRestartEstimator');
+  const typeCards = document.querySelectorAll('.est-type-card');
+  const presetChips = document.querySelectorAll('.est-preset-chip');
+  const areaSlider = document.getElementById('convAreaSlider');
+  const areaDisplay = document.getElementById('convAreaDisplay');
+  const envCards = document.querySelectorAll('.est-env-card');
+  const regionSelect = document.getElementById('convRegion');
+  const priorityCards = document.querySelectorAll('.est-priority-card');
+  const submitBriefBtn = document.getElementById('btnSubmitBriefToContact');
 
-  updateCalculations();
+  const goToStep = (step) => {
+    state.currentStep = step;
 
-  // One-click RFP builder transfer to contact form
-  if (btnApplyRFP) {
-    btnApplyRFP.addEventListener('click', () => {
-      const area = areaSlider.value;
-      const app = document.querySelector('input[name="estApp"]:checked')?.parentElement.querySelector('.est-option-label')?.textContent || 'Structure';
-      const mat = document.querySelector('input[name="estMat"]:checked')?.parentElement.querySelector('.est-option-label')?.textContent || 'Membrane';
-      const reg = regionSelect.options[regionSelect.selectedIndex].text;
+    // Update panes
+    panes.forEach(pane => pane.classList.remove('active'));
+    const targetPane = document.getElementById(`estPane${step}`);
+    if (targetPane) targetPane.classList.add('active');
+
+    // Update stepper pills
+    stepPills.forEach(pill => {
+      const pillStep = parseInt(pill.getAttribute('data-step-target'), 10);
+      pill.classList.remove('active', 'completed');
+      if (pillStep === step) {
+        pill.classList.add('active');
+      } else if (pillStep < step) {
+        pill.classList.add('completed');
+      }
+    });
+
+    // Update progress bar
+    if (progressBar) {
+      progressBar.style.width = `${(step / 4) * 100}%`;
+    }
+
+    // If step 4, calculate output
+    if (step === 4) {
+      calculateBrief();
+    }
+
+    // Scroll to top of estimator smoothly if needed
+    estimatorCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  // Step 1: Typology selection
+  typeCards.forEach(card => {
+    card.addEventListener('click', () => {
+      typeCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      state.typology = card.getAttribute('data-type');
+      state.typologyName = card.getAttribute('data-type-name') || 'Architectural Structure';
+      const defaultArea = parseInt(card.getAttribute('data-default-area'), 10);
+      const defaultMat = card.getAttribute('data-default-mat');
+
+      if (!isNaN(defaultArea)) {
+        state.area = defaultArea;
+        if (areaSlider) areaSlider.value = defaultArea;
+        if (areaDisplay) areaDisplay.textContent = `${defaultArea.toLocaleString()} m²`;
+
+        // Match preset chip if possible
+        presetChips.forEach(chip => {
+          const chipArea = parseInt(chip.getAttribute('data-area'), 10);
+          chip.classList.toggle('active', chipArea === defaultArea);
+        });
+      }
+
+      if (defaultMat) {
+        state.material = defaultMat;
+        priorityCards.forEach(pCard => {
+          pCard.classList.toggle('active', pCard.getAttribute('data-mat') === defaultMat);
+        });
+      }
+    });
+  });
+
+  // Step 2: Scale & Context
+  presetChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      presetChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const area = parseInt(chip.getAttribute('data-area'), 10);
+      state.area = area;
+      if (areaSlider) areaSlider.value = area;
+      if (areaDisplay) areaDisplay.textContent = `${area.toLocaleString()} m²`;
+    });
+  });
+
+  if (areaSlider) {
+    areaSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      state.area = val;
+      if (areaDisplay) areaDisplay.textContent = `${val.toLocaleString()} m²`;
+
+      presetChips.forEach(chip => {
+        const chipArea = parseInt(chip.getAttribute('data-area'), 10);
+        chip.classList.toggle('active', chipArea === val);
+      });
+    });
+  }
+
+  envCards.forEach(card => {
+    card.addEventListener('click', () => {
+      envCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const input = card.querySelector('input[type="radio"]');
+      if (input) {
+        input.checked = true;
+        state.environment = input.value;
+      }
+    });
+  });
+
+  if (regionSelect) {
+    regionSelect.addEventListener('change', (e) => {
+      state.region = e.target.value;
+    });
+  }
+
+  // Step 3: Priority selection
+  priorityCards.forEach(card => {
+    card.addEventListener('click', () => {
+      priorityCards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      state.material = card.getAttribute('data-mat') || 'ptfe';
+      state.materialPriority = card.getAttribute('data-priority') || 'permanent';
+    });
+  });
+
+  // Step Navigation Next / Back
+  nextBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nextStep = parseInt(btn.getAttribute('data-next'), 10);
+      if (!isNaN(nextStep)) {
+        goToStep(nextStep);
+      }
+    });
+  });
+
+  backBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const backStep = parseInt(btn.getAttribute('data-back'), 10);
+      if (!isNaN(backStep)) {
+        goToStep(backStep);
+      }
+    });
+  });
+
+  stepPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const targetStep = parseInt(pill.getAttribute('data-step-target'), 10);
+      if (!isNaN(targetStep)) {
+        goToStep(targetStep);
+      }
+    });
+  });
+
+  if (restartBtn) {
+    restartBtn.addEventListener('click', () => {
+      goToStep(1);
+    });
+  }
+
+  // Step 4: Calculate Engineering Output
+  const calculateBrief = () => {
+    const area = state.area;
+    const mat = state.material;
+    const env = state.environment;
+
+    // Multipliers
+    let weightPerM2 = 1.45; // kg/m²
+    let steelDensity = 26; // kg steel per m²
+    let matTitle = 'PTFE Fiberglass';
+    let lifespanText = '35+ Year Design Life';
+    let heatText = '85% Deflection';
+    let timelineWeeks = Math.max(8, Math.round(Math.sqrt(area) * 0.35));
+
+    if (mat === 'etfe') {
+      weightPerM2 = 0.55;
+      steelDensity = 18;
+      matTitle = 'ETFE Foil Cushions';
+      lifespanText = '25 - 30 Year Life';
+      heatText = '75% Deflection';
+      timelineWeeks = Math.max(10, Math.round(Math.sqrt(area) * 0.38));
+    } else if (mat === 'pvc') {
+      weightPerM2 = 1.15;
+      steelDensity = 22;
+      matTitle = 'PVC / PVDF Composite';
+      lifespanText = '15 - 20+ Year Life';
+      heatText = '78% Deflection';
+      timelineWeeks = Math.max(6, Math.round(Math.sqrt(area) * 0.30));
+    }
+
+    const fabricTons = ((area * weightPerM2) / 1000).toFixed(1);
+    const steelTons = Math.round((area * steelDensity) / 1000);
+    const codeNum = Math.floor(1000 + Math.random() * 9000);
+
+    // Populate brief outputs
+    const briefCode = document.getElementById('briefCode');
+    const briefTitle = document.getElementById('briefTitle');
+    const outArea = document.getElementById('outArea');
+    const outTypology = document.getElementById('outTypology');
+    const outMat = document.getElementById('outMat');
+    const outLifespan = document.getElementById('outLifespan');
+    const outFabWeight = document.getElementById('outFabWeight');
+    const outSteelWeight = document.getElementById('outSteelWeight');
+    const outHeatDeflect = document.getElementById('outHeatDeflect');
+    const outTimeline = document.getElementById('outTimeline');
+    const outRiggingDesc = document.getElementById('outRiggingDesc');
+    const outCodesDesc = document.getElementById('outCodesDesc');
+
+    if (briefCode) briefCode.textContent = `2026-${codeNum}`;
+    if (briefTitle) briefTitle.textContent = `${state.typologyName} Scope Brief`;
+    if (outArea) outArea.innerHTML = `${area.toLocaleString()} <span class="unit">m²</span>`;
+    if (outTypology) outTypology.textContent = state.typologyName;
+    if (outMat) outMat.innerHTML = `${matTitle}`;
+    if (outLifespan) outLifespan.textContent = lifespanText;
+    if (outFabWeight) outFabWeight.innerHTML = `${fabricTons} <span class="unit">Tons</span>`;
+    if (outSteelWeight) outSteelWeight.innerHTML = `~${steelTons} <span class="unit">Tons</span>`;
+    if (outHeatDeflect) outHeatDeflect.innerHTML = `${heatText} <span class="unit">Thermal Drop</span>`;
+    if (outTimeline) outTimeline.innerHTML = `${timelineWeeks} - ${timelineWeeks + 4} <span class="unit">Weeks</span>`;
+
+    // Environment-specific rigging description
+    if (outRiggingDesc) {
+      if (env === 'coastal') {
+        outRiggingDesc.textContent = 'Specified with electro-polished AISI 316 and 2205 Duplex marine stainless rigging, Teflon isolation gaskets, and ASTM B117 salt-fog rated cables for marine environments.';
+      } else if (env === 'desert') {
+        outRiggingDesc.textContent = 'High-grade galvanized S355 structural steel with 3-coat C5M epoxy paint system, UV-resistant PVDF lacquer, and anti-abrasion sand seals.';
+      } else {
+        outRiggingDesc.textContent = 'Architectural grade swaged stainless rigging, concealed rainwater drainage channels, and acoustic textile integration for urban spaces.';
+      }
+    }
+
+    if (outCodesDesc) {
+      const reg = state.region;
+      if (reg === 'UAE') {
+        outCodesDesc.textContent = 'Compliant with UAE Civil Defense Fire Code, ASCE 7-16 wind design loads (up to 160 km/h), and Dubai Municipality / Abu Dhabi DMT regulations.';
+      } else if (reg === 'KSA') {
+        outCodesDesc.textContent = 'Compliant with Saudi Building Code (SBC 301 / 801), MOMRA regulations, and Red Sea / NEOM environmental sustainability guidelines.';
+      } else {
+        outCodesDesc.textContent = 'Engineered under ASCE 7-16, DIN 4102 / ASTM E108 non-combustibility standards, and localized municipal building codes.';
+      }
+    }
+  };
+
+  // Submit Brief to Contact Form
+  if (submitBriefBtn) {
+    submitBriefBtn.addEventListener('click', () => {
+      const area = state.area;
+      const type = state.typologyName;
+      const mat = state.material.toUpperCase();
+      const env = state.environment.toUpperCase();
+      const regText = regionSelect ? regionSelect.options[regionSelect.selectedIndex].text : state.region;
 
       const messageBox = document.getElementById('contactMessage');
       const subjectSelect = document.getElementById('contactSubject');
       if (subjectSelect) subjectSelect.value = 'RFP Proposal Request';
 
       if (messageBox) {
-        messageBox.value = `Hello Structurflex Middle East Engineering Team,\n\nI would like to request an official Engineering Scope & Proposal based on the website calculator configuration:\n- Application: ${app}\n- Estimated Area: ${parseInt(area, 10).toLocaleString()} m²\n- Membrane Material: ${mat}\n- Target Region: ${reg}\n\nPlease reach out with technical pre-qualification and consultation details.`;
+        messageBox.value = `Hello Structurflex Middle East Engineering Team,\n\nI have generated an Engineering Specification Brief via the Intelligent Scope Estimator:\n- Typology: ${type}\n- Planned Footprint: ${area.toLocaleString()} m²\n- Specified Material: ${mat}\n- Environmental Context: ${env}\n- Regional Code: ${regText}\n\nPlease contact me to review the preliminary engineering calculations, structural steel sizing, and formal consultation schedule.`;
       }
 
-      // Smooth scroll to contact section
       const contactSection = document.getElementById('contact');
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: 'smooth' });
